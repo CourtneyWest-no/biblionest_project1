@@ -10,3 +10,13 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def profile(request):
+    return render(request, 'profile.html')
+
+@login_required
+def dashboard(request):
+    return render(request, 'dashboard.html')
