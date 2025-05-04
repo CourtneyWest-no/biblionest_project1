@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header .logout-form {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        header .logout-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        header .logout-form button:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            padding: 20px;
+        }
+        .collection {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .add-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .add-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>BiblioNest</h1>
+        </div>
+        <div>
+            <span>Welcome, {{ user.username }}!</span>
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Your Collections</h2>
+        {% if collections %}
+            {% for collection in collections %}
+                <div class="collection">
+                    <h3>{{ collection.name }}</h3>
+                    <p>Owner: {{ collection.owner.username }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>You have no collections yet.</p>
+        {% endif %}
+        <a href="/add-collection/" class="add-button">Add Collection</a>
+    </div>
+</body>
+</html>
