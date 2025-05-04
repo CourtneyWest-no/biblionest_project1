@@ -26,4 +26,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', views.home, name='home'),
     path('add-collection/', views.add_collection, name='add_collection'),
+    path('collection/<int:collection_id>/', views.view_collection, name='view_collection'),
 ]

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .forms import ReferenceForm
@@ -43,3 +43,13 @@ def add_collection(request):
 
     user_references = Reference.objects.filter(owner=request.user) 
     return render(request, 'BiblioApp/add_collection.html', {'references': user_references})
+
+@login_required
+def view_collection(request, collection_id):
+    """View to display details of a specific collection and its references."""
+    collection = get_object_or_404(Collection, id=collection_id, owner=request.user)  # Ensure the user owns the collection
+    references = collection.references.all()  # Get all references associated with the collection
+    return render(request, 'BiblioApp/view_collection.html', {
+        'collection': collection,
+        'references': references,
+    })

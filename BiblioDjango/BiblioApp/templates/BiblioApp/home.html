@@ -55,12 +55,20 @@
             background-color: #0056b3;
         }
         header a {
-            color: inherit; /* Inherit the color from the parent element */
-            text-decoration: none; /* Remove underline */
+            color: inherit; 
         }
 
         header a:hover {
-            text-decoration: underline; /* Optional: Add underline on hover for better UX */
+            text-decoration: underline; 
+        }
+
+        .collection a {
+            color: inherit; 
+            text-decoration: none; 
+        }
+
+        .collection a:hover {
+            text-decoration: underline; 
         }
     </style>
 </head>
@@ -82,7 +90,7 @@
         {% if collections %}
             {% for collection in collections %}
                 <div class="collection">
-                    <h3>{{ collection.name }}</h3>
+                    <h3><a href="{% url 'view_collection' collection.id %}">{{ collection.name }}</a></h3>
                 </div>
             {% endfor %}
         {% else %}
