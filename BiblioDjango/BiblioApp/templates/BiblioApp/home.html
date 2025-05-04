@@ -54,12 +54,20 @@
         .add-button:hover {
             background-color: #0056b3;
         }
+        header a {
+            color: inherit; /* Inherit the color from the parent element */
+            text-decoration: none; /* Remove underline */
+        }
+
+        header a:hover {
+            text-decoration: underline; /* Optional: Add underline on hover for better UX */
+        }
     </style>
 </head>
 <body>
     <header>
         <div>
-            <h1>BiblioNest</h1>
+            <h1><a href="/">BiblioNest</a></h1>
         </div>
         <div>
             <span>Welcome, {{ user.username }}!</span>
