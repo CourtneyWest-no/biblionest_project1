@@ -43,14 +43,14 @@ source $(poetry env info --path)/bin activate
 Set up the database by applying migrations:
 
 ```bash
-python [manage.py](http://_vscodecontentref_/2) migrate
+python BiblioDjango/manage.py migrate
 ```
 ### 4. Run the Development Server
 
 Start the Django development server:
 
 ```bash
-python [manage.py](http://_vscodecontentref_/4) runserver
+python BiblioDjango/manage.py runserver
 ```
 
 Access the application in your browser at:
