@@ -1,141 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Collection</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        header .logout-form button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        header .logout-form button:hover {
-            background-color: #0056b3;
-        }
-        .container {
-            padding: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .form-group button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-        .reference-form {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        header a {
-        color: inherit; /* Inherit the color from the parent element */
-        text-decoration: none; /* Remove underline */
-        }
+{% extends 'BiblioApp/base.html' %}
+{% block title %}Add Collection | BiblioNest{% endblock %}
+{% block content %}
+<h2>Add Collection</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="collection_name">Collection Name:</label>
+    <input type="text" id="collection_name" name="collection_name" required>
 
-        header a:hover {
-            text-decoration: underline; /* Optional: Add underline on hover for better UX */
-        }
-    </style>
-    <script>
-        function addReferenceForm() {
-            const referenceFormsContainer = document.getElementById('reference-forms-container');
-            const referenceFormTemplate = `
-                <div class="reference-form">
-                    <div class="form-group">
-                        <label for="title">Title:</label>
-                        <input type="text" name="new_references_title[]" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="author">Author:</label>
-                        <input type="text" name="new_references_author[]" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="publication_date">Publication Date:</label>
-                        <input type="date" name="new_references_publication_date[]">
-                    </div>
-                    <div class="form-group">
-                        <label for="source">Source:</label>
-                        <input type="url" name="new_references_source[]">
-                    </div>
-                </div>
-            `;
-            referenceFormsContainer.insertAdjacentHTML('beforeend', referenceFormTemplate);
-        }
-    </script>
-</head>
-<body>
-    <header>
+    <label for="references">Add Existing References:</label>
+    <select id="references" name="references" multiple>
+        {% for reference in references %}
+            <option value="{{ reference.id }}">{{ reference.title }}</option>
+        {% endfor %}
+    </select>
+
+    <h3>New References</h3>
+    <div id="reference-forms-container"></div>
+    <button type="button" onclick="addReferenceForm()">Add Reference</button>
+
+    <button type="submit">Create Collection</button>
+</form>
+
+<script>
+function addReferenceForm() {
+    const container = document.getElementById('reference-forms-container');
+    container.insertAdjacentHTML('beforeend', `
         <div>
-            <h1><a href="/">BiblioNest</a></h1>
+            <input type="text" name="new_references_title[]" placeholder="Title" required>
+            <input type="text" name="new_references_author[]" placeholder="Author" required>
+            <input type="date" name="new_references_publication_date[]">
+            <input type="url" name="new_references_source[]" placeholder="Source URL">
         </div>
-        <div>
-            <span>Welcome, {{ user.username }}!</span>
-            <form method="post" action="{% url 'logout' %}" class="logout-form">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    </header>
-    <div class="container">
-        <h2>Add Collection</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="collection_name">Collection Name:</label>
-                <input type="text" id="collection_name" name="collection_name" required>
-            </div>
-            <div class="form-group">
-                <label for="references">Add Existing References:</label>
-                <select id="references" name="references" multiple>
-                    {% for reference in references %}
-                        <option value="{{ reference.id }}">{{ reference.title }}</option>
-                    {% endfor %}
-                </select>
-                <small>Hold Ctrl (Cmd on Mac) to select multiple references.</small>
-            </div>
-            <h3>New References</h3>
-            <div id="reference-forms-container"></div>
-            <button type="button" onclick="addReferenceForm()">Add Reference</button>
-            <div class="form-group">
-                <button type="submit">Create Collection</button>
-            </div>
-        </form>
-    </div>
-</body>
-</html>
+    `);
+}
+</script>
+{% endblock %}

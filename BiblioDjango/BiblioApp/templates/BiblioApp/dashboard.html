@@ -1,0 +1,15 @@
+{% extends 'BiblioApp/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Dashboard</h2>
+    <p>Welcome to your dashboard, {{ user.username }}!</p>
+
+    <div class="nav-buttons">
+        <a href="{% url 'BiblioApp:home' %}" class="nav-button">Home</a>
+        <a href="{% url 'BiblioApp:profile' %}" class="nav-button">Profile</a>
+    </div>
+</div>
+{% endblock %}

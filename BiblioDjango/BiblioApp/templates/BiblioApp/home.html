@@ -1,102 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        header .logout-form {
-            display: inline-block;
-            margin-left: 10px;
-        }
-        header .logout-form button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        header .logout-form button:hover {
-            background-color: #0056b3;
-        }
-        .container {
-            padding: 20px;
-        }
-        .collection {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .add-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .add-button:hover {
-            background-color: #0056b3;
-        }
-        header a {
-            color: inherit; 
-        }
-
-        header a:hover {
-            text-decoration: underline; 
-        }
-
-        .collection a {
-            color: inherit; 
-            text-decoration: none; 
-        }
-
-        .collection a:hover {
-            text-decoration: underline; 
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div>
-            <h1><a href="/">BiblioNest</a></h1>
+{% extends 'BiblioApp/base.html' %}
+{% block title %}Home | BiblioNest{% endblock %}
+{% block content %}
+<h2>Your Collections</h2>
+{% if collections %}
+    {% for collection in collections %}
+        <div class="collection">
+            <h3><a href="{% url 'BiblioApp:view_collection' collection.id %}">{{ collection.name }}</a></h3>
         </div>
-        <div>
-            <span>Welcome, {{ user.username }}!</span>
-            <form method="post" action="{% url 'logout' %}" class="logout-form">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    </header>
-    <div class="container">
-        <h2>Your Collections</h2>
-        {% if collections %}
-            {% for collection in collections %}
-                <div class="collection">
-                    <h3><a href="{% url 'view_collection' collection.id %}">{{ collection.name }}</a></h3>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>You have no collections yet.</p>
-        {% endif %}
-        <a href="/add-collection/" class="add-button">Add Collection</a>
-    </div>
-</body>
-</html>
+    {% endfor %}
+{% else %}
+    <p>You have no collections yet.</p>
+{% endif %}
+<a href="{% url 'BiblioApp:add_collection' %}" class="add-button">Add Collection</a>
+{% endblock %}

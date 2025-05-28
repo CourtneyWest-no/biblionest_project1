@@ -1,0 +1,17 @@
+{% extends 'BiblioApp/base.html' %}
+
+{% block title %}Add Reference{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Add New Reference</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Reference</button>
+    </form>
+
+    <p><a href="{% url 'BiblioApp:home' %}">Back to Home</a></p>
+</div>
+{% endblock %}
