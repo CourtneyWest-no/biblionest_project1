@@ -6,42 +6,71 @@
     <div class="card">
         <h2>Edit Reference: {{ reference.title }}</h2>
         <form method="post">
-            {% csrf_token %}
-
-            <div class="form-group">
-                <label for="{{ form.title.id_for_label }}">Title:</label>
-                {{ form.title }}
+          {% csrf_token %}
+          
+          {% if form.non_field_errors %}
+            <div class="error">
+              {{ form.non_field_errors }}
             </div>
+          {% endif %}
 
-            <div class="form-group">
-                <label for="{{ form.author.id_for_label }}">Author:</label>
-                {{ form.author }}
-            </div>
+          <div>
+            {{ form.title.label_tag }}
+            {{ form.title.as_widget }}
+            {% if form.title.errors %}
+              <div class="error">{{ form.title.errors }}</div>
+            {% endif %}
+          </div>
 
-            <div class="form-group">
-                <label for="{{ form.publication_date.id_for_label }}">Publication Date:</label>
-                {{ form.publication_date }}
-            </div>
+          <div>
+            {{ form.description.label_tag }}
+            {{ form.description.as_widget }}
+            {% if form.description.errors %}
+              <div class="error">{{ form.description.errors }}</div>
+            {% endif %}
+          </div>
 
-            <div class="form-group">
-                <label for="{{ form.source.id_for_label }}">Source:</label>
-                {{ form.source }}
-            </div>
+          <div>
+            {{ form.author.label_tag }}
+            {{ form.author.as_widget }}
+            {% if form.author.errors %}
+              <div class="error">{{ form.author.errors }}</div>
+            {% endif %}
+          </div>
 
-            <div class="form-group">
-                <label for="{{ form.tags.id_for_label }}">Tags:</label>
-                {{ form.tags }}
-            </div>
+          <div>
+            {{ form.publication_date.label_tag }}
+            {{ form.publication_date.as_widget }}
+            {% if form.publication_date.errors %}
+              <div class="error">{{ form.publication_date.errors }}</div>
+            {% endif %}
+          </div>
 
-            <div class="form-group">
-                <label for="{{ form.new_tags.id_for_label }}">New Tags (comma-separated):</label>
-                {{ form.new_tags }}
-            </div>
+          <div>
+            {{ form.source.label_tag }}
+            {{ form.source.as_widget }}
+            {% if form.source.errors %}
+              <div class="error">{{ form.source.errors }}</div>
+            {% endif %}
+          </div>
 
-            <div class="button-group">
-                <button type="submit" class="primary-button">Update Reference</button>
-                <a href="{% url 'BiblioApp:reference_list' %}" class="secondary-button">Cancel</a>
-            </div>
+          <div>
+            {{ form.tags.label_tag }}
+            {{ form.tags.as_widget }}
+            {% if form.tags.errors %}
+              <div class="error">{{ form.tags.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div>
+            {{ form.new_tags.label_tag }}
+            {{ form.new_tags.as_widget }}
+            {% if form.new_tags.errors %}
+              <div class="error">{{ form.new_tags.errors }}</div>
+            {% endif %}
+          </div>
+
+          <button type="submit">Save</button>
         </form>
     </div>
 </div>

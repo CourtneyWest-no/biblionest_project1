@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .forms import ReferenceForm
 from .models import Collection, Reference, Tag
-
+import pdb
 
 @login_required
 def home(request):
@@ -52,11 +52,15 @@ def view_collection(request, collection_id):
 @login_required
 def create_reference(request):
     if request.method == 'POST':
+        # pdb.set_trace()
         form = ReferenceForm(request.POST)
+        print(str(form))
+
         if form.is_valid():
             reference = form.save(commit=False)
             reference.owner = request.user
             reference.save()
+            print("we got here " + str(reference))
 
             form.save_m2m()
 
@@ -69,7 +73,12 @@ def create_reference(request):
                         reference.tags.add(tag)
 
             return redirect('BiblioApp:reference_list')
+        else:
+            print("the erros: " + str(form.errors))  # <-- Add this line
+
+            print("form not valid")
     else:
+        
         form = ReferenceForm()
     return render(request, 'BiblioApp/create_reference.html', {'form': form})
 
@@ -91,6 +100,7 @@ def edit_reference(request, reference_id):
                         reference.tags.add(tag)
 
             return redirect('BiblioApp:reference_list')
+
     else:
         form = ReferenceForm(instance=reference)
 

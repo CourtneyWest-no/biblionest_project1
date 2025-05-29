@@ -12,6 +12,10 @@ class ReferenceForm(forms.ModelForm):
         required=False,
         help_text="Enter new tags separated by commas."
     )
+    title = forms.CharField(required=True)
+    author = forms.CharField(required=True)
+    publication_date = forms.DateField(required=True)
+    source = forms.CharField(required=True)
 
     class Meta:
         model = Reference
