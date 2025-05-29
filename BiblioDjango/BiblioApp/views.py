@@ -1,42 +1,44 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import ReferenceForm
-from .models import Collection, Reference
 from django.contrib.auth.forms import UserCreationForm
+from .forms import ReferenceForm
+from .models import Collection, Reference, Tag
+
 
 @login_required
 def home(request):
-    user_collections = Collection.objects.filter(owner=request.user)
-    return render(request, 'BiblioApp/home.html', {'collections': user_collections})
+    collections = Collection.objects.filter(owner=request.user)
+    return render(request, 'BiblioApp/home.html', {'collections': collections})
 
 @login_required
 def add_collection(request):
     if request.method == 'POST':
         collection_name = request.POST.get('collection_name')
-        references_ids = request.POST.getlist('references')
+        reference_ids = request.POST.getlist('references')
         collection = Collection.objects.create(name=collection_name, owner=request.user)
-        existing_references = Reference.objects.filter(id__in=references_ids, owner=request.user)
+        existing_references = Reference.objects.filter(id__in=reference_ids, owner=request.user)
         collection.references.add(*existing_references)
-        new_titles = request.POST.getlist('new_references_title[]')
-        new_authors = request.POST.getlist('new_references_author[]')
-        new_publication_dates = request.POST.getlist('new_references_publication_date[]')
-        new_sources = request.POST.getlist('new_references_source[]')
 
-        for title, author, publication_date, source in zip(new_titles, new_authors, new_publication_dates, new_sources):
+        titles = request.POST.getlist('new_references_title[]')
+        authors = request.POST.getlist('new_references_author[]')
+        publication_dates = request.POST.getlist('new_references_publication_date[]')
+        sources = request.POST.getlist('new_references_source[]')
+
+        for title, author, pub_date, source in zip(titles, authors, publication_dates, sources):
             if title.strip() and author.strip():
-                new_reference = Reference.objects.create(
+                new_ref = Reference.objects.create(
                     title=title.strip(),
                     author=author.strip(),
-                    publication_date=publication_date or None,
+                    publication_date=pub_date or None,
                     source=source or None,
                     owner=request.user
                 )
-                collection.references.add(new_reference)
+                collection.references.add(new_ref)
 
         return redirect('BiblioApp:home')
 
-    user_references = Reference.objects.filter(owner=request.user)
-    return render(request, 'BiblioApp/add_collection.html', {'references': user_references})
+    references = Reference.objects.filter(owner=request.user)
+    return render(request, 'BiblioApp/add_collection.html', {'references': references})
 
 @login_required
 def view_collection(request, collection_id):
@@ -44,7 +46,7 @@ def view_collection(request, collection_id):
     references = collection.references.all()
     return render(request, 'BiblioApp/view_collection.html', {
         'collection': collection,
-        'references': references,
+        'references': references
     })
 
 @login_required
@@ -55,7 +57,17 @@ def create_reference(request):
             reference = form.save(commit=False)
             reference.owner = request.user
             reference.save()
+
             form.save_m2m()
+
+            new_tags = form.cleaned_data.get('new_tags')
+            if new_tags:
+                for tag_name in new_tags.split(','):
+                    tag_name = tag_name.strip()
+                    if tag_name:
+                        tag, created = Tag.objects.get_or_create(name=tag_name)
+                        reference.tags.add(tag)
+
             return redirect('BiblioApp:reference_list')
     else:
         form = ReferenceForm()
@@ -64,13 +76,24 @@ def create_reference(request):
 @login_required
 def edit_reference(request, reference_id):
     reference = get_object_or_404(Reference, id=reference_id, owner=request.user)
+    
     if request.method == 'POST':
         form = ReferenceForm(request.POST, instance=reference)
         if form.is_valid():
             form.save()
+
+            new_tags = form.cleaned_data.get('new_tags')
+            if new_tags:
+                for tag_name in new_tags.split(','):
+                    tag_name = tag_name.strip()
+                    if tag_name:
+                        tag, created = Tag.objects.get_or_create(name=tag_name)
+                        reference.tags.add(tag)
+
             return redirect('BiblioApp:reference_list')
     else:
         form = ReferenceForm(instance=reference)
+
     return render(request, 'BiblioApp/edit_reference.html', {'form': form, 'reference': reference})
 
 @login_required
@@ -80,6 +103,11 @@ def delete_reference(request, reference_id):
         reference.delete()
         return redirect('BiblioApp:reference_list')
     return render(request, 'BiblioApp/delete_reference.html', {'reference': reference})
+
+@login_required
+def reference_list(request):
+    references = Reference.objects.filter(owner=request.user)
+    return render(request, 'BiblioApp/reference_list.html', {'references': references})
 
 def register(request):
     if request.method == 'POST':
@@ -98,8 +126,3 @@ def profile(request):
 @login_required
 def dashboard(request):
     return render(request, 'BiblioApp/dashboard.html')
-
-@login_required
-def reference_list(request):
-    references = Reference.objects.filter(owner=request.user)
-    return render(request, 'BiblioApp/reference_list.html', {'references': references})

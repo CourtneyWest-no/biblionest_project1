@@ -9,15 +9,30 @@
     <h3>References</h3>
     {% if references %}
         {% for reference in references %}
-            <div class="reference">
+            <div class="collection">
                 <h4>{{ reference.title }}</h4>
                 <p><strong>Author:</strong> {{ reference.author }}</p>
                 <p><strong>Publication Date:</strong> {{ reference.publication_date|date:"F j, Y" }}</p>
-                {% if reference.source %}
-                    <p><strong>Source:</strong> <a href="{{ reference.source }}" target="_blank">{{ reference.source }}</a></p>
-                {% else %}
-                    <p><strong>Source:</strong> Not provided</p>
-                {% endif %}
+
+                <p><strong>Source:</strong>
+                    {% if reference.source %}
+                        <a href="{{ reference.source }}" target="_blank">{{ reference.source }}</a>
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </p>
+
+                {% with reference.referencetag_set.all as tag_links %}
+                    <p><strong>Tags:</strong>
+                        {% if tag_links %}
+                            {% for tag in tag_links %}
+                                <span class="tag-badge">{{ tag.tag.name }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="tag-badge none">None</span>
+                        {% endif %}
+                    </p>
+                {% endwith %}
             </div>
         {% endfor %}
     {% else %}

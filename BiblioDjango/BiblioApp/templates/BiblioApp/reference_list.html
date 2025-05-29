@@ -1,32 +1,44 @@
 {% extends 'BiblioApp/base.html' %}
-{% block title %}Your References | BiblioNest{% endblock %}
+{% block title %}All References | BiblioNest{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Your References</h2>
-    {% if references %}
-        {% for reference in references %}
-            <div class="collection">
-                <h3>{{ reference.title }}</h3>
-                <p><strong>Author:</strong> {{ reference.author }}</p>
-                <p><strong>Publication Date:</strong> {{ reference.publication_date|date:"F j, Y" }}</p>
+<a href="{% url 'BiblioApp:home' %}" class="back-button">← Back</a>
+
+<h2>All Your References</h2>
+{% if references %}
+    {% for reference in references %}
+        <div class="collection">
+            <h3>{{ reference.title }}</h3>
+            <p><strong>Author:</strong> {{ reference.author }}</p>
+            <p><strong>Publication Date:</strong> {{ reference.publication_date }}</p>
+            <p><strong>Source:</strong>
                 {% if reference.source %}
-                    <p><strong>Source:</strong> <a href="{{ reference.source }}" target="_blank">{{ reference.source }}</a></p>
+                    <a href="{{ reference.source }}" target="_blank">{{ reference.source }}</a>
+                {% else %}
+                    Not provided
                 {% endif %}
-
-                <div class="nav-buttons">
-                    <a href="{% url 'BiblioApp:edit_reference' reference.id %}" class="nav-button">Edit</a>
-
-                    <form method="post" action="{% url 'BiblioApp:delete_reference' reference.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="nav-button danger">Delete</button>
-                    </form>
-                </div>
+            </p>
+            <p><strong>Tags:</strong>
+                {% with reference.referencetag_set.all as tag_links %}
+                    {% if tag_links %}
+                        {% for tag in tag_links %}
+                            <span class="tag-badge">{{ tag.tag.name }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span class="tag-badge none">None</span>
+                    {% endif %}
+                {% endwith %}
+            </p>
+            <div class="action-buttons">
+                <a href="{% url 'BiblioApp:edit_reference' reference.id %}" class="small-button">Edit</a>
+                <form method="post" action="{% url 'BiblioApp:delete_reference' reference.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="small-button danger">Delete</button>
+                </form>
             </div>
-        {% endfor %}
-    {% else %}
-        <p>You haven't added any references yet.</p>
-    {% endif %}
-    <a href="{% url 'BiblioApp:create_reference' %}" class="add-button">Create New Reference</a>
-</div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>You haven't added any references yet.</p>
+{% endif %}
 {% endblock %}

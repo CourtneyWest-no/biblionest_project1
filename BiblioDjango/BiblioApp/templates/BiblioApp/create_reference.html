@@ -1,17 +1,44 @@
 {% extends 'BiblioApp/base.html' %}
-
-{% block title %}Add Reference{% endblock %}
+{% block title %}Add Reference | BiblioNest{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Add New Reference</h2>
+<a href="{% url 'BiblioApp:home' %}" class="back-button">← Back</a>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save Reference</button>
-    </form>
+<h2>Add New Reference</h2>
+<form method="post">
+    {% csrf_token %}
 
-    <p><a href="{% url 'BiblioApp:home' %}">Back to Home</a></p>
-</div>
+    <div class="form-group">
+        <label for="{{ form.title.id_for_label }}">Title:</label>
+        {{ form.title }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.author.id_for_label }}">Author:</label>
+        {{ form.author }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.publication_date.id_for_label }}">Publication Date:</label>
+        {{ form.publication_date }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.source.id_for_label }}">Source (URL):</label>
+        {{ form.source }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.tags.id_for_label }}">Tags:</label>
+        {{ form.tags }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.new_tags.id_for_label }}">New Tags (comma-separated):</label>
+        {{ form.new_tags }}
+    </div>
+
+    <button type="submit" class="primary-button">Save Reference</button>
+</form>
 {% endblock %}
+
