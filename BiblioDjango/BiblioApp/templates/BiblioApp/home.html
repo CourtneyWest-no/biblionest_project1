@@ -1,15 +1,27 @@
 {% extends 'BiblioApp/base.html' %}
+
 {% block title %}Home | BiblioNest{% endblock %}
+
 {% block content %}
 <h2>Your Collections</h2>
+
 {% if collections %}
     {% for collection in collections %}
         <div class="collection">
-            <h3><a href="{% url 'BiblioApp:view_collection' collection.id %}">{{ collection.name }}</a></h3>
+            <h3>
+                <a href="{% url 'BiblioApp:view_collection' collection.id %}">
+                    {{ collection.name }}
+                </a>
+            </h3>
         </div>
     {% endfor %}
 {% else %}
     <p>You have no collections yet.</p>
 {% endif %}
-<a href="{% url 'BiblioApp:add_collection' %}" class="add-button">Add Collection</a>
+
+<div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+    <a href="{% url 'BiblioApp:add_collection' %}" class="nav-button">Add Collection</a>
+    <a href="{% url 'BiblioApp:create_reference' %}" class="nav-button" style="background-color: #6f42c1;">Create New Reference</a>
+    <a href="{% url 'BiblioApp:reference_list' %}" class="nav-button" style="background-color: #17a2b8;">View All References</a>
+</div>
 {% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'BiblioApp/base.html' %}
+{% block title %}Edit Reference | BiblioNest{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Reference</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="nav-button">Update Reference</button>
+        <a href="{% url 'BiblioApp:reference_list' %}" class="nav-button">Cancel</a>
+    </form>
+</div>
+{% endblock %}

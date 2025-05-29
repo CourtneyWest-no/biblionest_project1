@@ -1,28 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-
 from .forms import ReferenceForm
 from .models import Collection, Reference
+from django.contrib.auth.forms import UserCreationForm
 
 @login_required
 def home(request):
-    """Home page view, accessible only to logged-in users."""
     user_collections = Collection.objects.filter(owner=request.user)
     return render(request, 'BiblioApp/home.html', {'collections': user_collections})
 
 @login_required
 def add_collection(request):
-    """View to add a new collection and optionally add references."""
     if request.method == 'POST':
         collection_name = request.POST.get('collection_name')
         references_ids = request.POST.getlist('references')
-
         collection = Collection.objects.create(name=collection_name, owner=request.user)
-
         existing_references = Reference.objects.filter(id__in=references_ids, owner=request.user)
         collection.references.add(*existing_references)
-
         new_titles = request.POST.getlist('new_references_title[]')
         new_authors = request.POST.getlist('new_references_author[]')
         new_publication_dates = request.POST.getlist('new_references_publication_date[]')
@@ -39,14 +33,13 @@ def add_collection(request):
                 )
                 collection.references.add(new_reference)
 
-        return redirect('home')
+        return redirect('BiblioApp:home')
 
     user_references = Reference.objects.filter(owner=request.user)
     return render(request, 'BiblioApp/add_collection.html', {'references': user_references})
 
 @login_required
 def view_collection(request, collection_id):
-    """View to display details of a specific collection and its references."""
     collection = get_object_or_404(Collection, id=collection_id, owner=request.user)
     references = collection.references.all()
     return render(request, 'BiblioApp/view_collection.html', {
@@ -56,39 +49,57 @@ def view_collection(request, collection_id):
 
 @login_required
 def create_reference(request):
-    """View to allow users to create a new reference."""
     if request.method == 'POST':
         form = ReferenceForm(request.POST)
         if form.is_valid():
             reference = form.save(commit=False)
             reference.owner = request.user
             reference.save()
-            form.save_m2m()  # Save tags if any
-            return redirect('reference_list')  # You’ll create this next
+            form.save_m2m()
+            return redirect('BiblioApp:reference_list')
     else:
         form = ReferenceForm()
     return render(request, 'BiblioApp/create_reference.html', {'form': form})
 
-from django.contrib.auth.forms import UserCreationForm
+@login_required
+def edit_reference(request, reference_id):
+    reference = get_object_or_404(Reference, id=reference_id, owner=request.user)
+    if request.method == 'POST':
+        form = ReferenceForm(request.POST, instance=reference)
+        if form.is_valid():
+            form.save()
+            return redirect('BiblioApp:reference_list')
+    else:
+        form = ReferenceForm(instance=reference)
+    return render(request, 'BiblioApp/edit_reference.html', {'form': form, 'reference': reference})
+
+@login_required
+def delete_reference(request, reference_id):
+    reference = get_object_or_404(Reference, id=reference_id, owner=request.user)
+    if request.method == 'POST':
+        reference.delete()
+        return redirect('BiblioApp:reference_list')
+    return render(request, 'BiblioApp/delete_reference.html', {'reference': reference})
 
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')
+            return redirect('BiblioApp:login')
     else:
         form = UserCreationForm()
     return render(request, 'BiblioApp/register.html', {'form': form})
-
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def profile(request):
     return render(request, 'BiblioApp/profile.html')
 
-from django.contrib.auth.decorators import login_required
-
 @login_required
 def dashboard(request):
     return render(request, 'BiblioApp/dashboard.html')
+
+@login_required
+def reference_list(request):
+    references = Reference.objects.filter(owner=request.user)
+    return render(request, 'BiblioApp/reference_list.html', {'references': references})

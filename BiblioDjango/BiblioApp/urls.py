@@ -14,4 +14,7 @@ urlpatterns = [
     path('add-collection/', views.add_collection, name='add_collection'),
     path('collection/<int:collection_id>/', views.view_collection, name='view_collection'),
     path('references/add/', views.create_reference, name='create_reference'),
+    path('references/', views.reference_list, name='reference_list'),
+    path('references/<int:reference_id>/edit/', views.edit_reference, name='edit_reference'),
+    path('references/<int:reference_id>/delete/', views.delete_reference, name='delete_reference'),
 ]

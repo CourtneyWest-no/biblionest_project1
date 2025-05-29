@@ -1,0 +1,14 @@
+{% extends 'BiblioApp/base.html' %}
+{% block title %}Delete Reference | BiblioNest{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Delete Reference</h2>
+    <p>Are you sure you want to delete <strong>{{ reference.title }}</strong> by {{ reference.author }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="nav-button danger">Yes, delete</button>
+        <a href="{% url 'BiblioApp:reference_list' %}" class="nav-button">Cancel</a>
+    </form>
+</div>
+{% endblock %}

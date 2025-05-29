@@ -3,13 +3,13 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Dashboard</h2>
-    <p>Welcome to your dashboard, {{ user.username }}!</p>
+<h2>Dashboard</h2>
+<p>Welcome to your dashboard, {{ user.username }}!</p>
 
-    <div class="nav-buttons">
-        <a href="{% url 'BiblioApp:home' %}" class="nav-button">Home</a>
-        <a href="{% url 'BiblioApp:profile' %}" class="nav-button">Profile</a>
-    </div>
+<div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+    <a href="{% url 'BiblioApp:home' %}" class="nav-button">Home</a>
+    <a href="{% url 'BiblioApp:profile' %}" class="nav-button">Profile</a>
+    <a href="{% url 'BiblioApp:create_reference' %}" class="nav-button" style="background-color: #6f42c1;">Create New Reference</a>
+    <a href="{% url 'BiblioApp:reference_list' %}" class="nav-button" style="background-color: #17a2b8;">View All References</a>
 </div>
 {% endblock %}
