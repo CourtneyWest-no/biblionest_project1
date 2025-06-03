@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>{% block title %}BiblioNest{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,10 @@
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #f4f4f4;
+            background-image: url("{% static 'images/1.png' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: #222;
         }
 
@@ -31,7 +35,7 @@
         header {
             background-color: #1f1f1f;
             color: white;
-            padding: 16px 32px;
+            padding: 8px 16px; /* Reduce padding */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -41,6 +45,14 @@
         header h1 {
             margin: 0;
             font-size: 1.6rem;
+            display: flex;
+            align-items: center; 
+            gap: 10px; 
+        }
+
+        header h1 img {
+            margin: 0; 
+            vertical-align: middle; 
         }
 
         header h1 a {
@@ -315,12 +327,14 @@
 <body>
 
     <header>
-        <h1><a href="{% url 'BiblioApp:home' %}">BiblioNest</a></h1>
+        <h1>
+            <img src="{% static 'images/logo.png' %}" alt="BiblioNest Logo" style="height: 80px; vertical-align: middle;">
+            <a href="{% url 'BiblioApp:home' %}">BiblioNest</a>
+        </h1>
         <div class="nav-area">
             {% if user.is_authenticated %}
                 <span>Welcome, {{ user.username }}!</span>
                 <a href="{% url 'BiblioApp:profile' %}">Profile</a>
-                <a href="{% url 'BiblioApp:dashboard' %}">Dashboard</a>
                 <form method="post" action="{% url 'BiblioApp:logout' %}" class="logout-form">
                     {% csrf_token %}
                     <button type="submit">Logout</button>
