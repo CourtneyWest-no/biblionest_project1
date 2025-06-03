@@ -151,6 +151,7 @@ def profile(request):
         user.last_name = request.POST.get('last_name', '')
         user.email = request.POST.get('email', '')
         user.bio = request.POST.get('bio', '')  
+        user.background_image = request.POST.get('background_image', user.background_image)
         user.save()
         return redirect('BiblioApp:profile')
 

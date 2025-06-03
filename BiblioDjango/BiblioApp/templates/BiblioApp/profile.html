@@ -28,6 +28,16 @@
             <textarea name="bio" id="bio" class="form-control" rows="4">{{ user.bio }}</textarea>
         </div>
 
+        <div class="form-group">
+            <label for="background_image">Select Background Image</label>
+            <select name="background_image" id="background_image" class="form-control">
+                <option value="images/1.png" {% if user.background_image == 'images/1.png' %}selected{% endif %}>Background 1</option>
+                <option value="images/2.png" {% if user.background_image == 'images/2.png' %}selected{% endif %}>Background 2</option>
+                <option value="images/3.png" {% if user.background_image == 'images/3.png' %}selected{% endif %}>Background 3</option>
+                <option value="images/4.png" {% if user.background_image == 'images/4.png' %}selected{% endif %}>Background 4</option>
+            </select>
+        </div>
+
         <button type="submit" class="nav-button">Update Profile</button>
     </form>
 
