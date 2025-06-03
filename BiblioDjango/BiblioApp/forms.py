@@ -1,5 +1,7 @@
 from django import forms
 from .models import Reference, Tag
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
 
 class ReferenceForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
@@ -20,3 +22,8 @@ class ReferenceForm(forms.ModelForm):
     class Meta:
         model = Reference
         fields = ['title', 'author', 'publication_date', 'source', 'tags', 'new_tags']
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'first_name', 'last_name']

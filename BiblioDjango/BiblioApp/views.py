@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from .forms import ReferenceForm
 from .models import Collection, Reference, Tag
 import pdb
 from django.db.models import Q
+from .forms import CustomUserCreationForm
+from django.contrib.auth import login
 
 @login_required
 def home(request):
@@ -134,12 +135,13 @@ def reference_list(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('BiblioApp:login')
+            user = form.save()
+            login(request, user)  # Log the user in after registration
+            return redirect('BiblioApp:home')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'BiblioApp/register.html', {'form': form})
 
 @login_required
@@ -151,6 +153,7 @@ def profile(request):
         user.last_name = request.POST.get('last_name', '')
         user.email = request.POST.get('email', '')
         user.bio = request.POST.get('bio', '')  
+        user.background_image = request.POST.get('background_image', user.background_image)
         user.save()
         return redirect('BiblioApp:profile')
 

@@ -15,6 +15,16 @@ class CustomUser(AbstractUser):
         related_name="biblioapp_users_permissions",
         blank=True,
     )
+    background_image = models.CharField(
+        max_length=255,
+        choices=[
+            ('images/1.png', 'Background 1'),
+            ('images/2.png', 'Background 2'),
+            ('images/3.png', 'Background 3'),
+            ('images/4.png', 'Background 4'),
+        ],
+        default='images/1.png',
+    )
 
     def __str__(self):
         return self.username

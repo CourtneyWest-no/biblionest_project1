@@ -43,6 +43,7 @@ source $(poetry env info --path)/bin activate
 Set up the database by applying migrations:
 
 ```bash
+python BiblioDjango/manage.py makemigrations
 python BiblioDjango/manage.py migrate
 ```
 ### 4. Run the Development Server
