@@ -26,9 +26,6 @@ db.sqlite3
 # Media files
 /media
 
-# Static files
-/static
-
 # Local environment settings
 .env
 
