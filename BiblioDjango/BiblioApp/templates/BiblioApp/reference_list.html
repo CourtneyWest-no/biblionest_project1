@@ -5,6 +5,12 @@
 <a href="{% url 'BiblioApp:home' %}" class="back-button">← Back</a>
 
 <h2>All Your References</h2>
+
+<form method="GET" action="{% url 'BiblioApp:reference_list' %}" class="search-form">
+    <input type="text" name="q" placeholder="Search by title, author, or tag..." value="{{ query }}" class="form-control" />
+    <button type="submit" class="nav-button">Search</button>
+</form>
+
 {% if references %}
     {% for reference in references %}
         <div class="collection">
@@ -39,6 +45,7 @@
         </div>
     {% endfor %}
 {% else %}
-    <p>You haven't added any references yet.</p>
+    <p>No references found{% if query %} for "{{ query }}"{% endif %}.</p>
 {% endif %}
 {% endblock %}
+

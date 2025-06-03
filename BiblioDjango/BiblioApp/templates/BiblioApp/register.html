@@ -8,9 +8,11 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Sign Up</button>
+        <button type="submit" class="nav-button">Sign Up</button>
     </form>
-    <p>Already have an account? <a href="{% url 'BiblioApp:login' %}">Login</a></p>
+    <p>Already have an account? 
+        <a href="{% url 'BiblioApp:login' %}" class="nav-button">Login</a>
+    </p>
 </div>
 {% endblock %}
 

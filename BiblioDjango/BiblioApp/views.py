@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import ReferenceForm
 from .models import Collection, Reference, Tag
 import pdb
+from django.db.models import Q
 
 @login_required
 def home(request):
@@ -116,8 +117,20 @@ def delete_reference(request, reference_id):
 
 @login_required
 def reference_list(request):
+    query = request.GET.get('q', '')
     references = Reference.objects.filter(owner=request.user)
-    return render(request, 'BiblioApp/reference_list.html', {'references': references})
+
+    if query:
+        references = references.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+
+    return render(request, 'BiblioApp/reference_list.html', {
+        'references': references,
+        'query': query,
+    })
 
 def register(request):
     if request.method == 'POST':
@@ -131,7 +144,17 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'BiblioApp/profile.html')
+    user = request.user
+
+    if request.method == 'POST':
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.email = request.POST.get('email', '')
+        user.bio = request.POST.get('bio', '')  
+        user.save()
+        return redirect('BiblioApp:profile')
+
+    return render(request, 'BiblioApp/profile.html', {'user': user})
 
 @login_required
 def dashboard(request):

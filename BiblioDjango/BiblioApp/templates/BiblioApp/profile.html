@@ -5,12 +5,37 @@
 {% block content %}
 <div class="container">
     <h2>User Profile</h2>
-    <p>Welcome, {{ user.username }}!</p>
+    <form method="POST">
+        {% csrf_token %}
 
-    <div class="nav-buttons">
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" value="{{ user.email }}" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea name="bio" id="bio" class="form-control" rows="4">{{ user.bio }}</textarea>
+        </div>
+
+        <button type="submit" class="nav-button">Update Profile</button>
+    </form>
+
+    <div class="nav-buttons" style="margin-top: 20px;">
         <a href="{% url 'BiblioApp:dashboard' %}" class="nav-button">Go to Dashboard</a>
     </div>
 </div>
 {% endblock %}
+
 
 
