@@ -35,7 +35,7 @@
         header {
             background-color: #1f1f1f;
             color: white;
-            padding: 8px 16px; /* Reduce padding */
+            padding: 8px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -46,13 +46,13 @@
             margin: 0;
             font-size: 1.6rem;
             display: flex;
-            align-items: center; 
-            gap: 10px; 
+            align-items: center;
+            gap: 10px;
         }
 
         header h1 img {
-            margin: 0; 
-            vertical-align: middle; 
+            margin: 0;
+            vertical-align: middle;
         }
 
         header h1 a {
@@ -278,6 +278,7 @@
         .back-button:hover {
             text-decoration: underline;
         }
+
         .white-button {
             background-color: #ffffff;
             color: #007bff;
@@ -299,6 +300,7 @@
             display: flex;
             gap: 10px;
         }
+
         .search-form input {
             flex: 1;
             padding: 10px;
@@ -320,8 +322,6 @@
         .search-form button:hover {
             background-color: #0056b3;
         }
-
-
     </style>
 </head>
 <body>
@@ -334,6 +334,7 @@
         <div class="nav-area">
             {% if user.is_authenticated %}
                 <span>Welcome, {{ user.username }}!</span>
+                <a href="{% url 'BiblioApp:home' %}">Home</a> 
                 <a href="{% url 'BiblioApp:profile' %}">Profile</a>
                 <form method="post" action="{% url 'BiblioApp:logout' %}" class="logout-form">
                     {% csrf_token %}

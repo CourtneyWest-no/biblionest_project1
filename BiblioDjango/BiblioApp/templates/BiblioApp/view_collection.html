@@ -3,6 +3,8 @@
 {% block title %}{{ collection.name }} | BiblioNest{% endblock %}
 
 {% block content %}
+<a href="{% url 'BiblioApp:home' %}" class="back-button">← Back</a>
+
     <h2>Collection: {{ collection.name }}</h2>
     <p><strong>Owner:</strong> {{ collection.owner.username }}</p>
 
