@@ -21,6 +21,7 @@ poetry.lock
 *.pyc
 *.pyo
 *.sqlite3
+db.sqlite3
 
 # Media files
 /media
