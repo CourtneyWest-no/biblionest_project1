@@ -46,7 +46,16 @@ Set up the database by applying migrations:
 python BiblioDjango/manage.py makemigrations
 python BiblioDjango/manage.py migrate
 ```
-### 4. Run the Development Server
+
+### 4. Load data
+
+Load startup data by doing:
+
+```bash
+python manage.py loaddata data.json
+```
+
+### 5. Run the Development Server
 
 Start the Django development server:
 
