@@ -55,7 +55,15 @@ Load startup data by doing:
 python manage.py loaddata data.json
 ```
 
-### 5. Run the Development Server
+### 5. Sample User Credentials for Testing
+
+Once you've loaded the fixture data, you can log in with the following account:
+
+**Regular User**
+- Username: `Bachelorgirl97`
+- Password: `Tamtam@97`
+
+### 6. Run the Development Server
 
 Start the Django development server:
 
